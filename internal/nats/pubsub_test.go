@@ -9,8 +9,6 @@ import (
     "strings"
 )
 
-var natsURL = "nats://127.0.0.1:4222" // you can change this
-
 func TestPubSub(t *testing.T) {
 	// To make sure it receives the message
 	psubject := "subject_"+randString(5)
@@ -19,17 +17,17 @@ func TestPubSub(t *testing.T) {
 	go func(){
 		time.Sleep(2 * time.Second)
 		log.Printf("Subject %v with Message %v created!\n",psubject, mpub)
-		npub := NatsClass{DefaultURL: natsURL, PubSubject: psubject, Message: mpub}
+		npub := NatsClass{DefaultURL: natsURLForTest, PubSubject: psubject, Message: mpub}
 		npub.Publish()
 		time.Sleep(2 * time.Second)
 		log.Printf("Subject %v with Message %v created!\n",psubject, mpub)
-		npub = NatsClass{DefaultURL: natsURL, PubSubject: psubject, Message: mpub}
+		npub = NatsClass{DefaultURL: natsURLForTest, PubSubject: psubject, Message: mpub}
 		npub.Publish()
 		time.Sleep(2 * time.Second)
 		syscall.Kill(syscall.Getpid(), syscall.SIGHUP) // kill that
 	}()
 
-	nsub := NatsClass{DefaultURL: natsURL, SubsSubject: psubject}
+	nsub := NatsClass{DefaultURL: natsURLForTest, SubsSubject: psubject}
 	nsub.SubscribeListen()
 }
 
@@ -41,11 +39,11 @@ func TestPubWithVerification(t *testing.T) {
 	go func(){
 		time.Sleep(2 * time.Second)
 		log.Printf("Subject %v with Message %v created!\n",psubject, mpub)
-		npub := NatsClass{DefaultURL: natsURL, PubSubject: psubject, Message: mpub}
+		npub := NatsClass{DefaultURL: natsURLForTest, PubSubject: psubject, Message: mpub}
 		npub.Publish()
 	}()
 
-	nc, _ := nats.Connect(natsURL)
+	nc, _ := nats.Connect(natsURLForTest)
 	defer nc.Close()
 
 	sub, _ := nc.SubscribeSync(psubject)

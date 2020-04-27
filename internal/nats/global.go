@@ -12,12 +12,15 @@ type NatsClass struct {
     UserCreds  string
     ReplySubject string
     ReplyMessage string
+    RequestSubject string
+    RequestMessage string
     QueueGroupName string
     PubSubject string
     Message string
     SubsSubject string
 }
 
+var natsURLForTest = "nats://127.0.0.1:4222" // you can change this
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func printMsg(m *nats.Msg, i int) {
