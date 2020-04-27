@@ -7,7 +7,7 @@ import (
 
 func (n NatsClass) Publish() {
 	if len(n.DefaultURL) == 0 {
-		log.Printf("[ERROR] Please set the NATS URL\n")
+		log.Fatalf("[ERROR] Please set the NATS URL\n")
 	} else {
 		opts := []nats.Option{nats.Name("NATS Sample Publisher")}
 		if (len(n.UserCreds) > 0) {
@@ -19,6 +19,10 @@ func (n NatsClass) Publish() {
 			log.Fatal(err)
 		}
 		defer nc.Close()
+
+		if (len(n.PubSubject) == 0) || (len(n.Message) == 0) {
+			log.Fatalf("[ERROR] Please set the Subject and Message to Publish\n")
+		}
 
 		subj, msg := n.PubSubject, []byte(n.Message)
 

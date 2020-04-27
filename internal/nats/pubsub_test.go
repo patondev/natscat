@@ -3,7 +3,6 @@ package nats
 import (
 	"log"
     "testing"
-    "math/rand"
     "time"
     "github.com/nats-io/nats.go"
     "syscall"
@@ -11,16 +10,6 @@ import (
 )
 
 var natsURL = "nats://127.0.0.1:4222" // you can change this
-var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
-
-func randString(length int) string {
-	const charset string = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	b := make([]byte, length)
-	for i := range b {
-		b[i] = charset[seededRand.Intn(len(charset))]
-	}
-	return string(b)
-}
 
 func TestPubSub(t *testing.T) {
 	// To make sure it receives the message
@@ -65,6 +54,8 @@ func TestPubWithVerification(t *testing.T) {
 		recvmsg := string(m.Data)
 		if (strings.Compare(recvmsg,mpub) != 0){
 			t.Errorf("The string received is not the same, should be %v but got %v",mpub,recvmsg)
+		} else {
+			t.Logf("Message matched!\n")
 		}
 	} else {
 	    t.Errorf("NextMsg timed out.")

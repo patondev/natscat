@@ -9,36 +9,43 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-func (n NatsClass) SubscribeListen() {
+func (n NatsClass) Reply() {
 	if len(n.DefaultURL) == 0 {
 		log.Fatalf("[ERROR] Please set the NATS URL\n")
 	} else {
-		opts := []nats.Option{nats.Name("NATS Sample Publisher")}
+		opts := []nats.Option{nats.Name("NATS Sample Responder")}
 		opts = setupConnOptions(opts)
+
+		// Use UserCredentials
 		if (len(n.UserCreds) > 0) {
 			opts = append(opts, nats.UserCredentials(n.UserCreds))
 		}
-		// Connect to NATS
+
 		nc, err := nats.Connect(n.DefaultURL, opts...)
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer nc.Close()
 
-		if (len(n.SubsSubject) == 0){
-			log.Fatalf("[ERROR] Please set the Subject to Subscribe\n")
+		if (len(n.ReplySubject) == 0) || (len(n.ReplyMessage) == 0) {
+			log.Fatalf("[ERROR] Please set Reply subject and message\n")
 		}
 
-		subj, i := n.SubsSubject, 0
+		subj, reply, i := n.ReplySubject, n.ReplyMessage, 0
 
-		nc.Subscribe(subj, func(msg *nats.Msg) {
-			i += 1
+		if (len(n.QueueGroupName) == 0){
+			log.Fatalf("[ERROR] Please set QueueGroupName\n")
+		}
+
+		nc.QueueSubscribe(subj, n.QueueGroupName, func(msg *nats.Msg) {
+			i++
 			printMsg(msg, i)
+			msg.Respond([]byte(reply))
 		})
 		nc.Flush()
 
 		if err := nc.LastError(); err != nil {
-			log.Println(err)
+			log.Fatal(err)
 		}
 
 		log.Printf("Listening on [%s]", subj)
@@ -49,5 +56,7 @@ func (n NatsClass) SubscribeListen() {
 	    //kill -SIGHUP XXXX
 
 	    <-sigs
+	    log.Printf("Draining...")
+		nc.Drain()
 	}
 }
