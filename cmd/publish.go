@@ -21,6 +21,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var publishSubject string
+var publishMessage string
+
 // publishCmd represents the publish command
 var publishCmd = &cobra.Command{
 	Use:   "publish",
@@ -38,6 +41,12 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(publishCmd)
+	rf := publishCmd.Flags()
+	rf.StringVarP(&publishSubject, "subject", "s", "", "Publish subject (required)")
+	rf.StringVarP(&publishMessage, "message", "m", "", "Publish message (required)")
+	cobra.MarkFlagRequired(rf,"subject")
+	cobra.MarkFlagRequired(rf,"message")
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
