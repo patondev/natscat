@@ -19,6 +19,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/patondev/natscat/internal/nats"
 )
 
 var subscribeSubject string
@@ -35,7 +36,8 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Conneting to nats://%v:%v\n",natsIP, natsPort)
-		fmt.Println("subscribe called")
+		nsub := nats.NatsClass{DefaultURL: "nats://"+natsIP+":"+natsPort, SubsSubject: subscribeSubject}
+		nsub.SubscribeListen()
 	},
 }
 
