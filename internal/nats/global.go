@@ -20,7 +20,7 @@ type NatsClass struct {
     SubsSubject string
 }
 
-var natsURLForTest = "nats://127.0.0.1:4222" // you can change this
+var natsURLForTest = "nats://127.0.0.1:4223" // you can change this
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func printMsg(m *nats.Msg, i int) {
