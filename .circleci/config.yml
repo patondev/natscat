@@ -9,5 +9,6 @@ jobs:
       - checkout
       - run: go get -v -t -d ./...
       - run: go test -v ./internal/nats/
-      - run: curl -sL https://git.io/goreleaser | bash
+      - run: curl -sL https://git.io/goreleaser | bash -s -- --snapshot
+
       
