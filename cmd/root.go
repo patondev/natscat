@@ -62,8 +62,8 @@ func init() {
   pf := rootCmd.PersistentFlags()
 
   pf.StringVar(&cfgFile, "config", "", "config file (default is $HOME/.natscat.yaml)")
-  pf.StringVar(&natsIP, "natsip", "127.0.0.1", "NATS IP Address")
-  pf.StringVar(&natsPort, "natsport", "4222",  "NATS Port")
+  pf.StringVar(&natsIP, "ip", "127.0.0.1", "NATS Server IP Address")
+  pf.StringVar(&natsPort, "port", "4222",  "NATS Target Port")
 
   // Cobra also supports local flags, which will only run
   // when this action is called directly.
