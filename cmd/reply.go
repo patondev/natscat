@@ -19,7 +19,12 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/patondev/natscat/internal/nats"
 )
+
+var replySubject string
+var replyMessage string
+var queueGroup string
 
 // replyCmd represents the reply command
 var replyCmd = &cobra.Command{
@@ -32,12 +37,20 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("reply called")
+		fmt.Printf("Conneting to nats://%v:%v\n",natsIP, natsPort)
+		nreply := nats.NatsClass{DefaultURL: "nats://"+natsIP+":"+natsPort, ReplySubject: replySubject, ReplyMessage: replyMessage, QueueGroupName: queueGroup}
+		nreply.Reply()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(replyCmd)
+	rf := replyCmd.Flags()
+	rf.StringVarP(&replySubject, "subject", "s", "", "Reply subject (required)")
+	rf.StringVarP(&replyMessage, "message", "m", "", "Reply message (required)")
+	rf.StringVar(&queueGroup, "qgroup", "default", "Queue Group")
+	cobra.MarkFlagRequired(rf,"subject")
+	cobra.MarkFlagRequired(rf,"message")
 
 	// Here you will define your flags and configuration settings.
 
