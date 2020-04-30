@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/patondev/natscat/internal/nats"
 )
@@ -29,8 +27,7 @@ var subjectsCmd = &cobra.Command{
 	Long: `List of subjects that online on NATS system
 	The Port that is being used, is the port for NATS monitoring.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Conneting to http://%v:%v/subsz?subs=1\n",natsIP, natsPort)
-		nsubjects := nats.NatsClass{DefaultURL: "http://"+natsIP+":"+natsPort+"/subsz?subs=1"}
+		nsubjects := nats.NatsClass{DefaultURL: natsAddress+"/subsz?subs=1"}
 		nsubjects.ListSubjects()
 	},
 }

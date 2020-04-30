@@ -37,8 +37,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Conneting to nats://%v:%v\n",natsIP, natsPort)
-		nreply := nats.NatsClass{DefaultURL: "nats://"+natsIP+":"+natsPort, ReplySubject: replySubject, ReplyMessage: replyMessage, QueueGroupName: queueGroup}
+		fmt.Printf("Conneting to %v\n",natsAddress)
+		nreply := nats.NatsClass{DefaultURL: natsAddress, ReplySubject: replySubject, ReplyMessage: replyMessage, QueueGroupName: queueGroup}
 		nreply.Reply()
 	},
 }

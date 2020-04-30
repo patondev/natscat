@@ -26,8 +26,7 @@ import (
 )
 
 var cfgFile string
-var natsIP string
-var natsPort string
+var natsAddress string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -62,8 +61,7 @@ func init() {
   pf := rootCmd.PersistentFlags()
 
   pf.StringVar(&cfgFile, "config", "", "config file (default is $HOME/.natscat.yaml)")
-  pf.StringVar(&natsIP, "ip", "127.0.0.1", "NATS Server IP Address")
-  pf.StringVar(&natsPort, "port", "4222",  "NATS Target Port")
+  pf.StringVar(&natsAddress, "addr", "nats://127.0.0.1:4222", "NATS Full Address")
 
   // Cobra also supports local flags, which will only run
   // when this action is called directly.
