@@ -28,14 +28,9 @@ var queueGroup string
 
 // replyCmd represents the reply command
 var replyCmd = &cobra.Command{
-	Use:   "reply",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "rep",
+	Short: "To reply to the request's subject with specific message",
+	Long: `To reply to the request's subject with specific message`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Conneting to %v\n",natsAddress)
 		nreply := nats.NatsClass{DefaultURL: natsAddress, ReplySubject: replySubject, ReplyMessage: replyMessage, QueueGroupName: queueGroup}
